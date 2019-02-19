@@ -8,7 +8,10 @@ function pg2HTML() {
       
         <div class="locationInputDiv">
           
-          <label>Location Entry </label><input type="text" id="locationTextInput" placeholder="City, State or Zip Code">
+          <label>Location Entry </label><input type="text"  id="locationTextInput" placeholder="City, State">
+          <p>OR</p>
+          <label>Zip Code </label><input type="text" id="locationZipCodeInput" placeholder="97217">
+          
           <button type="submit" id="locationInputSubmitButton">Submit</button>
         
         </div>
@@ -103,15 +106,15 @@ function pg3HTML() {
 const MTP_API_URL = 'https://www.mountainproject.com/data/get-routes-for-lat-lon?';
 
 
-//successfully tested the following until next comment in Replit. It works!
+
 function getMTPAPI(latitude, longitude) {
     const query = {
         url: MTP_API_URL,
         type: 'GET',
         datatype: 'JSON',
         data: {
-            lat: 45,
-            lon: -120,
+            lat: `${latitude}`,
+            lon: `${longitude}`,
             maxDistance: 100,
             maxResults: 10,
             minDiff: 5.10,
@@ -131,7 +134,7 @@ function receiveAndPrint(data) {
 }
 
 
-$(getMTPAPI);
+//$(getMTPAPI);
 //end MTPAPI test here.
 
 //start cmpgrdAPI test here.
@@ -171,3 +174,96 @@ function getCmpGrdAPI() {
   
   $.ajax(settings);
 };
+
+function pgTwoLoad() {
+  console.log('test one');
+  $('.appStartButton').on('click', function() {
+    event.preventDefault();
+    console.log('test two');
+    $('.container').html(pg2HTML());
+    runUserLocation();
+    getUserLocationInputText();
+  });
+}
+
+function userLocation() {
+  console.log('test 4');
+  if(!navigator.geolocation) {  
+    alert("browser does not support geolocation");
+  }
+  else {
+      console.log('testing');
+      navigator.geolocation.getCurrentPosition(function(position) {
+        
+        const lat = position.coords.latitude;
+        const long = position.coords.longitude;
+        
+        console.log(`You are located at ${lat} by ${long}`);
+      });
+  }
+  
+};
+
+function runUserLocation() {
+  $('#useMyLocation').on('click', function() {
+    event.preventDefault();
+    console.log('test five');
+    userLocation();
+
+  })
+}
+
+
+
+function runApp() {
+  pgTwoLoad();
+
+}
+
+function getUserLocationInputText() {
+  $('.locationInputForm').on('submit', function() {
+    event.preventDefault();
+    console.log('test 7');
+    let userTextInput = $('#locationTextInput').val();
+    let userZipInput = $('#locationZipCodeInput').val();
+    console.log('zip code is:' + userZipInput);
+    if (userZipInput != false) {
+      return getGeoCodeInfo(userZipInput);
+    }
+    else {
+      return getGeoCodeInfo(userTextInput);
+    }
+    
+    
+  })
+}
+//next step is to write geocode api. all data inputs work.
+function getGeoCodeInfo(data) {
+  console.log('testing' + data);
+  const settings = {
+    url: "https://maps.googleapis.com/maps/api/geocode/json?",
+    data: {
+      address: `${data}`,
+      key: 'AIzaSyDqwJF7AZb3d_625WPrfAQgul7hWqbQxcI'
+    },
+    dataType: 'JSON',
+    method: 'GET',
+    success: function(results) {
+      console.log(JSON.stringify(results, null, 4));
+    },
+    error: function() {console.log('error')}
+  };
+
+
+  $.ajax(settings);
+
+
+
+}
+
+
+
+
+
+
+$(runApp);
