@@ -119,7 +119,7 @@ function getMTPAPI(latitude, longitude) {
             maxResults: 10,
             minDiff: 5.10,
             maxDiff: 5.12,
-            key: '110813283-0c931da562d47906fd27625cd113513c'
+            key: ''
         },
         success:function(data) {
           return receiveAndPrint(data);
@@ -146,7 +146,7 @@ function getCmpGrdAPI() {
       landmarkLat: '45.345',
       landmarkLong: '-120.123',
       landmarkName: 'true',
-      api_key: 'm9vs7bkgcfgmkheuqcrxjmxh'
+      api_key: ''
     },
     dataType: 'xml',
     method: 'GET',
@@ -244,7 +244,7 @@ function getGeoCodeInfo(data) {
     url: "https://maps.googleapis.com/maps/api/geocode/json?",
     data: {
       address: `${data}`,
-      key: 'AIzaSyDqwJF7AZb3d_625WPrfAQgul7hWqbQxcI'
+      key: ''
     },
     dataType: 'JSON',
     method: 'GET',
